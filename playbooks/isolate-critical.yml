@@ -1,0 +1,10 @@
+name: isolate-critical
+description: Trigger hard isolation for critical systems with two-person approval.
+inputs:
+  - deviceId
+  - vendor
+steps:
+  - action: isolate
+    params:
+      level: hard
+      reason: "High confidence ransomware"

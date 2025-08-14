@@ -1,0 +1,20 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PowerShell
+        uses: PowerShell/PowerShell@v1
+        with:
+          version: "7.4.x"
+      - name: Install modules
+        run: pwsh -NoProfile -Command "Install-Module Pester -Scope CurrentUser -Force; Install-Module powershell-yaml -Scope CurrentUser -Force"
+      - name: Run tests
+        run: pwsh -NoProfile -Command "Invoke-Pester -Path tests -CI"
