@@ -10,7 +10,14 @@ jobs:
       - name: Setup PowerShell modules
         run: pwsh -NoLogo -NoProfile -Command "Set-PSRepository PSGallery -InstallationPolicy Trusted; Install-Module Pester,PSScriptAnalyzer,powershell-yaml -Force -Scope CurrentUser"
       - name: Lint
-        run: pwsh -NoProfile -Command "Invoke-ScriptAnalyzer -Path ./src -Recurse -Severity Warning,Error; if ($LASTEXITCODE -ne 0) { exit 1 }"
+        run: |
+          pwsh -NoProfile -Command "& {
+            Invoke-ScriptAnalyzer -Path ./src -Recurse -Severity Warning,Error
+            if ($LASTEXITCODE -ne 0) {
+              Write-Error \"Linting failed\"
+              exit 1
+            }
+          }"
       - name: Test
         run: pwsh -NoProfile -Command "Invoke-Pester -Path ./tests -CI"
       - name: Package
