@@ -11,10 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Setup PowerShell
-        uses: PowerShell/PowerShell@v1
+        uses: microsoft/setup-powershell@v1
         with:
-          version: "7.4.x"
+          powershell-version: "7.4"
       - name: Install modules
-        run: pwsh -NoProfile -Command "Install-Module Pester -Scope CurrentUser -Force; Install-Module powershell-yaml -Scope CurrentUser -Force"
+        run: |
+          pwsh -NoProfile -Command "Install-Module Pester -Scope CurrentUser -Force"
+          pwsh -NoProfile -Command "Install-Module powershell-yaml -Scope CurrentUser -Force"
       - name: Run tests
         run: pwsh -NoProfile -Command "Invoke-Pester -Path tests -CI"
