@@ -1,4 +1,5 @@
-Import-Module (Join-Path $PSScriptRoot "../src/RedShield") -Force
+$modulePath = Join-Path (Split-Path $PSScriptRoot -Parent) "src\RedShield"
+Import-Module $modulePath -Force
 
 Describe "RedShield Module" {
   It "imports the module" {
