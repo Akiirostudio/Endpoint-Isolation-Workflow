@@ -1,0 +1,6 @@
+timeoutSeconds: 60
+autoSoftIfTimeout: true
+channels:
+  slack:
+    enabled: true
+    secretName: RTEIW_SLACK_WEBHOOK

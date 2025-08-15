@@ -1,0 +1,8 @@
+defaultVendor: Null
+vendors:
+  Null:
+    enabled: true
+  CrowdStrike:
+    enabled: false
+  MDE:
+    enabled: false

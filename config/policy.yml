@@ -1,0 +1,7 @@
+approvalTimeoutSeconds: 60
+sites:
+  default:
+    maxBatchPercent: 5
+    maxConcurrent: 10
+    softFallback: true
+    evidenceFirst: true
