@@ -1,4 +1,4 @@
-function Invoke-RSVendorAction {
+function Invoke-RTEIWVendorAction {
     param(
         [Parameter(Mandatory)][string] $Vendor,
         [Parameter(Mandatory)][ValidateSet("Isolate","Deisolate","State","Evidence")] [string] $Operation,

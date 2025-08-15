@@ -1,12 +1,12 @@
-function Invoke-RSApproval {
+function Invoke-RTEIWApproval {
     param(
         [Parameter(Mandatory)][string] $Message,
         [Parameter(Mandatory)][bool]   $RequiresTwo
     )
-    $cfg        = Get-RSConfig
+    $cfg        = Get-RTEIWConfig
     $approval   = $cfg.approvals
-    $webhookUrl = Get-Secret -Name "RS_SLACK_WEBHOOK" -ErrorAction SilentlyContinue
-    if (-not $webhookUrl) { throw "Slack webhook secret RS_SLACK_WEBHOOK not found in vault." }
+    $webhookUrl = Get-Secret -Name "RTEIW_SLACK_WEBHOOK" -ErrorAction SilentlyContinue
+    if (-not $webhookUrl) { throw "Slack webhook secret RTEIW_SLACK_WEBHOOK not found in vault." }
 
     $payload = @{ text = $Message } | ConvertTo-Json -Depth 5
     try {

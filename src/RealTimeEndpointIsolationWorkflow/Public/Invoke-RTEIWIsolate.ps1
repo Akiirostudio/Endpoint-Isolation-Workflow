@@ -1,4 +1,4 @@
-function Invoke-RSIsolate {
+function Invoke-RTEIWIsolate {
     [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory)][string] $DeviceId,
@@ -7,6 +7,7 @@ function Invoke-RSIsolate {
         [string] $Reason = "incident-response",
         [switch] $EvidenceFirst
     )
+
     $ctx = @{
         device       = $DeviceId
         vendor       = $Vendor
@@ -17,17 +18,20 @@ function Invoke-RSIsolate {
         batchPercent = 1
         concurrent   = 1
     }
-    $decision = Invoke-RSPolicy -Context $ctx
+    $decision = Invoke-RTEIWPolicy -Context $ctx
     $needTwo  = [bool]$decision.RequiresTwo
+
     if ($EvidenceFirst -or $decision.EvidenceFirst) {
-        Start-RSEvidenceCollection -DeviceId $DeviceId -Vendor $Vendor | Out-Null
+        Start-RTEIWEvidenceCollection -DeviceId $DeviceId -Vendor $Vendor | Out-Null
     }
-    $approval = Invoke-RSApproval -Message "Isolate $Vendor::$DeviceId as $Level for $Reason" -RequiresTwo:$needTwo
+
+    $approval = Invoke-RTEIWApproval -Message "Isolate $Vendor::$DeviceId as $Level for $Reason" -RequiresTwo:$needTwo
     if ($approval.Decision -eq "DENY") { throw "Isolation denied by approver(s)." }
     if ($approval.Decision -eq "SOFT") { $Level = "soft" }
+
     if ($PSCmdlet.ShouldProcess("$Vendor::$DeviceId", "Isolate ($Level)")) {
-        $result = Invoke-RSVendorAction -Vendor $Vendor -Operation Isolate -Params @{ DeviceId=$DeviceId; Level=$Level }
-        Write-RSAudit -Action "isolate" -Data @{ device=$DeviceId; vendor=$Vendor; level=$Level; approvers=$approval.Approvers; result=$result }
+        $result = Invoke-RTEIWVendorAction -Vendor $Vendor -Operation Isolate -Params @{ DeviceId=$DeviceId; Level=$Level }
+        Write-RTEIWAudit -Action "isolate" -Data @{ device=$DeviceId; vendor=$Vendor; level=$Level; approvers=$approval.Approvers; result=$result }
         return $result
     }
 }

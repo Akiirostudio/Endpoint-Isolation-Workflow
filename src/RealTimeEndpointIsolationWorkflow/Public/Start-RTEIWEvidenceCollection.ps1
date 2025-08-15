@@ -1,10 +1,12 @@
-function Start-RSEvidenceCollection {
-    [CmdletBinding()]
+function Start-RTEIWEvidenceCollection {
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory)][string] $DeviceId,
         [Parameter(Mandatory)][ValidateSet("Null","CrowdStrike","MDE")] [string] $Vendor
     )
-    $res = Invoke-RSVendorAction -Vendor $Vendor -Operation Evidence -Params @{ DeviceId = $DeviceId }
-    Write-RSAudit -Action "evidence" -Data @{ device=$DeviceId; vendor=$Vendor; result=$res }
-    return $res
+    if ($PSCmdlet.ShouldProcess("$Vendor::$DeviceId", "Start evidence collection")) {
+        $res = Invoke-RTEIWVendorAction -Vendor $Vendor -Operation Evidence -Params @{ DeviceId = $DeviceId }
+        Write-RTEIWAudit -Action "evidence" -Data @{ device=$DeviceId; vendor=$Vendor; result=$res }
+        return $res
+    }
 }

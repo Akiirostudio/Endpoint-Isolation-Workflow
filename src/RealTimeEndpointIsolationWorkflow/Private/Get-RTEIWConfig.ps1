@@ -1,4 +1,4 @@
-function Get-RSConfig {
+function Get-RTEIWConfig {
     param([string]$Path = (Join-Path (Resolve-Path "$PSScriptRoot/..").Path "config"))
     Import-Module powershell-yaml -ErrorAction Stop
     $cfg = @{
